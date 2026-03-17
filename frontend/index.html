@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Agendamentos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Sistema de Agendamentos</h1>    
+
+<div class="container">
+    <h2>Criar Cliente</h2>
+    <input type="text" id="cliente_nome" placeholder="Nome">
+    <input type="text" id="cliente_telefone" placeholder="Telefone">
+    <button id="btnCriarCliente" onclick="criarCliente()">Criar Cliente</button>
+
+    <h2>Criar Agendamento</h2>
+    <input type="text" id="agendamento_cliente_nome" placeholder="Nome do Cliente">
+    <input type="date" id="data_agendamento" placeholder="Data">
+    <button onclick="criarAgendamento()">Criar</button>
+    <h3>Escolha os Serviços:</h3>
+    <div id="servicos_checkbox"></div>
+
+    <h2>Agendamentos</h2>
+    <div>
+        <div>
+            <input type="date" id="filtro_inicio">
+            <label for="filtro_inicio">Data Início</label>
+        </div>
+        <div>
+            <input type="date" id="filtro_fim" placeholder="Até">
+            <label for="filtro_fim">Data Fim</label>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Serviços</th>
+                <th>Status</th>
+                <th>Preço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabela_agendamentos"></tbody>
+    </table>
+    <button onclick="filtrarAgendamentos()">Filtrar pelo período</button>
+    <button onclick="listarAgendamentos()">Listar todos agendamentos</button>
+
+    <h2>Relatório Semanal</h2>
+
+    <input type="text" id="ano" placeholder="Ano">
+    <input type="text" id="semana" placeholder="Semana">
+
+    <button onclick="relatorioSemanal()">Buscar</button>
+
+    <div id="relatorio_semanal"></div>
+
+    <div id="modalEdicao" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal()">&times;</span>
+        <h2>Editar Agendamento #<span id="edit_id"></span></h2>
+        
+        <label>Cliente:</label>
+        <input type="text" id="edit_cliente" readonly>
+        
+        <label>Data:</label>
+        <input type="date" id="edit_data">
+        
+        <br><label>Serviços:</label>
+        <div id="edit_servicos"></div>
+        
+        <label>Admin (alterar fora do prazo):</label>
+        <input type="checkbox" id="edit_admin">
+        
+        <button onclick="salvarEdicao()">Salvar</button>
+    </div>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
