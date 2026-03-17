@@ -149,6 +149,16 @@ GET	/agendamentos/relatorio-semanal	    Relatório de desempenho
 
 ---
 
+# Vídeo de demonstração
+
+Devido ao limite do Github (100MB), o vídeo de demonstração está hospedado no Youtube:
+
+Link: https://youtu.be/iD34xsTRgj8
+
+Duração 3:39
+
+---
+
 # Licença
 
 Este projeto foi desenvolvido para fins de avaliação técnica
