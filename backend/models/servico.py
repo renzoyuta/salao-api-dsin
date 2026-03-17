@@ -1,7 +1,6 @@
+from database.connection import db
 from sqlalchemy import Float
 from sqlalchemy.orm import Mapped, mapped_column
-
-from database.connection import db
 
 
 class Servico(db.Model):
@@ -11,3 +10,6 @@ class Servico(db.Model):
     nome: Mapped[str] = mapped_column(unique=True)
 
     preco: Mapped[float] = mapped_column(Float)
+
+    def to_dict(self):
+        return {"id": self.id, "nome": self.nome, "preco": self.preco}

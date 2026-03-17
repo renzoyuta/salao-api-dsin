@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from database.connection import db
 from models.agendamento import Agendamento
+from models.cliente import Cliente
 from models.servico import Servico
 from sqlalchemy.orm import joinedload
 
@@ -39,12 +40,17 @@ def listar_agendamento():
 
 
 def criar_agendamento(dados):
-    cliente_id = dados.get("cliente_id")
+    cliente_nome = dados.get("cliente_nome")
     data_agendamento = dados.get("data")
     servicos_ids = dados.get("servicos", [])
 
-    if not cliente_id:
-        raise ValueError("Informe o id do cliente")
+    cliente = Cliente.query.filter_by(nome=cliente_nome).first()
+
+    if not cliente_nome or cliente_nome.strip() == "":
+        raise ValueError("Informe o nome do cliente")
+
+    if not cliente:
+        raise ValueError("Cliente não cadastrado")
 
     if not data_agendamento:
         raise ValueError("Informe a data do agendamento")
@@ -58,12 +64,12 @@ def criar_agendamento(dados):
         raise ValueError("A data do agendamento não pode ser no passado")
 
     agendamento_existente = verificar_agendamento_semana(
-        cliente_id, data_agendamento_formatado
+        cliente.id, data_agendamento_formatado
     )
 
     if agendamento_existente:
         raise ValueError(
-            f"Cliente já possui agendamento nessa semana. Data Sugerida: {agendamento_existente.data}"
+            f"Cliente já possui agendamento nessa semana. Data Sugerida: {agendamento_existente.data.strftime('%d/%m/%Y')}"
         )
 
     servicos = Servico.query.filter(Servico.id.in_(servicos_ids)).all()
@@ -71,7 +77,7 @@ def criar_agendamento(dados):
     valor_total = sum(s.preco for s in servicos)
 
     agendamento = Agendamento(
-        cliente_id=cliente_id,
+        cliente_id=cliente.id,
         data=data_agendamento_formatado,
         servicos=servicos,
         valor=valor_total,
@@ -82,7 +88,7 @@ def criar_agendamento(dados):
 
     return {
         "id": agendamento.id,
-        "cliente_id": cliente_id,
+        "cliente_id": cliente.id,
         "data": data_agendamento,
         "valor": valor_total,
     }
@@ -112,7 +118,7 @@ def atualizar_agendamento(agendamento_id: int, dados, admin=False):
 
             if agendamento_existente:
                 raise ValueError(
-                    f"Cliente já possui agendamento nessa semana. Data Sugerida: {agendamento_existente.data}"
+                    f"Cliente já possui agendamento nessa semana. Data Sugerida: {agendamento_existente.data.strftime('%d/%m/%Y')}"
                 )
 
         agendamento.data = nova_data
@@ -136,8 +142,8 @@ def atualizar_agendamento(agendamento_id: int, dados, admin=False):
     return
 
 
-def atualizar_status(cliente_id: int, dados):
-    agendamento = Agendamento.query.get(cliente_id)
+def atualizar_status(agendamento_id: int, dados):
+    agendamento = Agendamento.query.get(agendamento_id)
 
     if not agendamento:
         raise ValueError("Agendamento não encontrado")

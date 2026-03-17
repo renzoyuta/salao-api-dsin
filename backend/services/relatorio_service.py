@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import func
-
 from database.connection import db
 from models.agendamento import Agendamento, agendamento_servicos
 from models.servico import Servico
+from sqlalchemy import func
 
 
 def desempenho_semanal(ano: int, semana: int):

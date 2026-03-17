@@ -15,14 +15,14 @@ from utils.api_response import api_response
 agendamento_bp = Blueprint("agendamento", __name__, url_prefix="/agendamentos")
 
 
-@agendamento_bp.route("/", methods=["GET"])
+@agendamento_bp.route("", methods=["GET"])
 def listar():
     agendamentos = listar_agendamento()
 
     return api_response(200, "Agendamentos encontrados", agendamentos)
 
 
-@agendamento_bp.route("/", methods=["POST"])
+@agendamento_bp.route("", methods=["POST"])
 def criar():
     dados = request.json
 
@@ -53,11 +53,11 @@ def atualizar(agendamento_id):
         return api_response(400, str(e))
 
 
-@agendamento_bp.route("/<int:cliente_id>/status", methods=["PUT"])
-def alterar_status(cliente_id: int):
+@agendamento_bp.route("/<int:agendamento_id>/status", methods=["PUT"])
+def alterar_status(agendamento_id: int):
     dados = request.json
 
-    atualizar_status(cliente_id, dados)
+    atualizar_status(agendamento_id, dados)
 
     return api_response(200, "Status atualizado", dados)
 
@@ -70,8 +70,8 @@ def buscar_historico():
     if not data_inicio or not data_fim:
         return api_response(400, "Informe a data inicial e data final")
 
-    data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d")
-    data_fim = datetime.strptime(data_fim, "%Y-%m-%d")
+    data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d").date()
+    data_fim = datetime.strptime(data_fim, "%Y-%m-%d").date()
 
     if data_inicio > data_fim:
         return api_response(400, "Data inicial não pode ser maior que data final")

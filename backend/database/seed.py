@@ -28,7 +28,7 @@ def seed_servicos():
         return
 
     servicos = [
-        Servico(nome="Cabelo", preco=100),
+        Servico(nome="Corte", preco=100),
         Servico(nome="Unha", preco=40),
         Servico(nome="Depilação", preco=60),
         Servico(nome="Maquiagem", preco=150),

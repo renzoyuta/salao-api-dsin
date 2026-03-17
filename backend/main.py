@@ -3,6 +3,7 @@ import os
 from database.connection import db
 from database.seed import seed_agendamentos, seed_clientes, seed_servicos
 from flask import Flask
+from flask_cors import CORS
 from models.agendamento import Agendamento  # noqa: F401
 from models.cliente import Cliente  # noqa: F401
 from models.servico import Servico  # noqa: F401
@@ -20,6 +21,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{database_path}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
+
+CORS(
+    app,
+    resources={r"/*": {"origins": "*"}},
+    allow_headers=["Content-Type"],
+    methods=["GET", "POST", "PUT", "OPTIONS"],
+)
 
 app.register_blueprint(agendamento_bp)
 app.register_blueprint(cliente_bp)
